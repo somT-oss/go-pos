@@ -5,7 +5,7 @@ on:
     branches: ["stable", "bare-metal-deployment"]
 
 env:
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: ${{ secrets.IMAGE_NAME }}
   REGISTRY: docker.io
 
 jobs:
@@ -40,5 +40,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }} #
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest #
           labels: ${{ steps.meta.outputs.labels }}
