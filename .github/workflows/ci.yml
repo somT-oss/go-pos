@@ -2,9 +2,9 @@ name: Continuous Integration
 
 on:
   push:
-    branches: ["main", "stable"]
+    branches: ["main", "stable", "bare-metal-deployment"]
   pull_request:
-    branches: ["main", "stable"]
+    branches: ["main", "stable", "bare-metal-deployment"]
 
 jobs:
   lint:
