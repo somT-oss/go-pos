@@ -15,8 +15,8 @@ jobs:
       
       - name: Log environment image name and registry
         run: |
-          echo ${{ env.IMAGE_NAME }}
-          echo ${{ env.REGISTRY }}
+          echo $IMAGE_NAME 
+          echo $REGISTRY
       
       - name: Log in to dockerhub
         uses: docker/login-action@v2.2.0
@@ -28,7 +28,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4.6.0
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: $REGISTRY/$IMAGE_NAME
       
       
       - name: Build and push Docker image
