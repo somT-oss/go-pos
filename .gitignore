@@ -19,3 +19,6 @@ log/
 *.test
 *.out
 coverage*
+
+# exclude production .env file
+.env.production

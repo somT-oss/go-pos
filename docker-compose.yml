@@ -3,7 +3,7 @@ version: "3.8"
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: go-pos_postgres
+    container_name: go_pos_postgres
     ports:
       - 5432:5432
     volumes:
@@ -17,10 +17,32 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
-
+    
+  server:
+    build: .
+    container_name: go_pos_server
+    environment:
+      APP_ENV: "${APP_ENV}"
+      HTTP_URL: "${HTTP_URL}"
+      HTTP_PORT: "${HTTP_PORT}"
+      HTTP_ALLOWED_ORIGINS: "${HTTP_ALLOWED_ORIGINS}"
+      DB_CONNECTION: "${DB_CONNECTION}"
+      DB_HOST: postgres
+      DB_NAME: "${DB_NAME}"
+      DB_USER: "${DB_USER}"
+      DB_PASSWORD: "${DB_PASSWORD}"
+      REDIS_ADDR: redis:6379
+      REDIS_PASSWORD: "${REDIS_PASSWORD}" 
+      TOKEN_DURATION: "${TOKEN_DURATION}"  
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+      - redis
+      
   redis:
     image: redis:7-alpine
-    container_name: go-pos_redis
+    container_name: go_pos_redis
     ports:
       - 6379:6379
     volumes:
