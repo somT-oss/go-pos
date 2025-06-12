@@ -19,7 +19,7 @@ services:
       retries: 3
     
   server:
-    image: "${IMAGE_NAME}"
+    build: .
     container_name: go_pos_server
     environment:
       APP_ENV: "${APP_ENV}"
