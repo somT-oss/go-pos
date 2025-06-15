@@ -1,4 +1,4 @@
-name: Create and push image to dockerhub
+name: Push to Dockerhub and Deploy to EC2
 
 on:
   push:
@@ -43,12 +43,12 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest #
           labels: ${{ steps.meta.outputs.labels }}
 
-      - name: Install SSH on the remote server
+      - name: SSH into server and setup env file and deploy.
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.HOST_IP }}
           username: ${{ secrets.HOST_USER }}
-          password: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
 
           script: |
             echo "Creating .env file for docker compose"
