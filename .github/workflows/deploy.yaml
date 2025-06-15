@@ -96,4 +96,4 @@ jobs:
 
             echo "Restart the containers"
             cd go-pos/
-            sudo docker compose --env-file ../.env.prod up --build 
+            sudo docker compose --env-file ../.env.prod up --build -d
