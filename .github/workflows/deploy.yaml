@@ -95,4 +95,5 @@ jobs:
             sudo docker compose down
 
             echo "Restart the containers"
-            sudo docker compose -f go-pos/docker-compose.yml --env-file ../.env.prod up --build 
+            cd go-pos/
+            sudo docker compose --env-file ../.env.prod up --build 
