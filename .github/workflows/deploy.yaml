@@ -71,27 +71,28 @@ jobs:
             sudo yum install -y git
             echo "Done installing Git"
 
-            echo "Cloning git repo"
             git clone http://github.com/${{ github.repository }}.git
+            echo "Cloning git repo"
 
             echo "Installing docker"
             sudo yum install -y docker
             echo "Docker installation complete"
 
             echo "Install docker compose plugin for docker"
+            sudo curl -SL https://github.com/docker/compose/releases/download/v2.26.1/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
             sudo mkdir -p /usr/local/lib/docker/cli-plugins
             sudo cp /usr/local/bin/docker-compose /usr/local/lib/docker/cli-plugins/
             sudo chown root:root /usr/local/lib/docker/cli-plugins/docker-compose
             sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
-            
-            echo "Start the docker server"
-            sudo systemctl start docker
-
+          
             docker compose --version
             echo "Docker compose installed successfully."
+
+            echo "Start the docker server"
+            sudo systemctl start docker
 
             echo "Stop all running containers"
             sudo docker compose down
 
             echo "Restart the containers"
-            sudo docker compose --env-file ../.env.prod up --build 
+            sudo docker compose -f go-pos/docker-compose.yml --env-file ../.env.prod up --build 
