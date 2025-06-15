@@ -65,21 +65,27 @@ jobs:
             DB_PASSWORD=${{ secrets.DB_PASSWORD }}\n
             REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}\n
             TOKEN_DURATION=${{ secrets.TOKEN_DURATION }}\n
-            " > .env
+            " > .env.prod
+
+            echo "Installing Git"
+            sudo yum install -y git
+            echo "Done installing Git"
+
+            echo "Cloning git repo"
+            git clone http://github.com/${{ github.repository }}.git
 
             echo "Installing docker"
             sudo yum install -y docker
             echo "Docker installation complete"
 
-            echo "Install docker compose"
-            sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-            sudo chmod +x /usr/local/bin/docker-compose
-              
-            docker-compose --version
+            echo "Install docker compose plugin for docker"
+            sudo yum install -y docker-compose-plugin
+            
+            docker compose --version
             echo "Docker compose installed successfully."
 
             echo "Stop all running containers"
-            docker-compose down
+            docker compose down
 
             echo "Restart the containers"
-            docker-compose --env-file .env up --build
+            docker compose --env-file ../.env.prod up --build 
