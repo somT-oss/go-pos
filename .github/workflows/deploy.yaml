@@ -57,7 +57,7 @@ jobs:
             APP_ENV=${{ secrets.APP_ENV }}\n  
             HTTP_URL=${{ secrets.HTTP_URL }}\n
             HTTP_PORT=${{ secrets.HTTP_PORT }}\n
-            HTTP_ALLOWED_ORIGINS=${{ secrets.HTTP_ALLOWED_ORIGINS }}\n
+            HTTP_ALLOWED_ORIGINS=${{ secrets.ALLOWED_HOST_ORIGINS }}\n
             DB_CONNECTION=${{ secrets.DB_CONNECTION }}\n
             DB_PORT=${{ secrets.DB_PORT }}\n
             DB_NAME=${{ secrets.DB_NAME }}\n
@@ -93,6 +93,9 @@ jobs:
 
             echo "Stop all running containers"
             sudo docker compose down
+
+            echo "Switch branch"
+            git checkout bare-metal-deployment
 
             echo "Restart the containers"
             cd go-pos/
