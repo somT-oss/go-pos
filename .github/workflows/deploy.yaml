@@ -79,7 +79,7 @@ jobs:
             echo "Docker compose installed successfully."
 
             echo "Stop all running containers"
-            docker-compose down
+            docker compose down
 
             echo "Restart the containers"
-            docker-compose --env-file=.env up --build
+            docker compose --env-file=.env up --build
