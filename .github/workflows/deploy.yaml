@@ -67,6 +67,10 @@ jobs:
             TOKEN_DURATION=${{ secrets.TOKEN_DURATION }}\n
             " > .env
 
+            echo "Installing docker"
+            sudo yum install -y docker
+            echo "Docker installation complete"
+
             echo "Stop all running containers"
             docker compose down
 
