@@ -79,13 +79,19 @@ jobs:
             echo "Docker installation complete"
 
             echo "Install docker compose plugin for docker"
-            sudo yum install -y docker-compose-plugin
+            sudo mkdir -p /usr/local/lib/docker/cli-plugins
+            sudo cp /usr/local/bin/docker-compose /usr/local/lib/docker/cli-plugins/
+            sudo chown root:root /usr/local/lib/docker/cli-plugins/docker-compose
+            sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
             
+            echo "Start the docker server"
+            sudo systemctl start docker
+
             docker compose --version
             echo "Docker compose installed successfully."
 
             echo "Stop all running containers"
-            docker compose down
+            sudo docker compose down
 
             echo "Restart the containers"
-            docker compose --env-file ../.env.prod up --build 
+            sudo docker compose --env-file ../.env.prod up --build 
