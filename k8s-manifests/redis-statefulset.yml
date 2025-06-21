@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis-statefulset
+spec:
+  selector:
+    matchLabels:
+      app: redis-statefulset
+  serviceName: redis-service
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: redis-statefulset
+    spec:
+      containers:
+      - name: redis
+        image: redis:7-alpine
+        env:
+          - name: REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: redis-secrets
+                key: REDIS_PASSWORD   
+        ports:
+        - containerPort: 6379
+          name: redis
+        volumeMounts:
+        - name: redis
+          mountPath: /data
+  volumeClaimTemplates:
+  - metadata:
+      name: redis
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi

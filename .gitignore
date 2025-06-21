@@ -22,3 +22,6 @@ coverage*
 
 # exclude production .env file
 .env.production
+
+# k8s secrets manifests
+k8s-manifests/*secrets.yml
