@@ -15,6 +15,7 @@ import (
 	"github.com/bagashiz/go-pos/internal/adapter/storage/postgres/repository"
 	"github.com/bagashiz/go-pos/internal/adapter/storage/redis"
 	"github.com/bagashiz/go-pos/internal/core/service"
+	"github.com/bagashiz/go-pos/internal/adapter/metrics"
 )
 
 //	@title						Go POS (Point of Sale) API
@@ -116,6 +117,9 @@ func main() {
 	orderService := service.NewOrderService(orderRepo, productRepo, categoryRepo, userRepo, paymentRepo, cache)
 	orderHandler := http.NewOrderHandler(orderService)
 
+	// 
+	metrics := metrics.NewPrometheusMetrics()
+
 	// Init router
 	router, err := http.NewRouter(
 		config.HTTP,
@@ -126,6 +130,7 @@ func main() {
 		*categoryHandler,
 		*productHandler,
 		*orderHandler,
+		metrics,
 	)
 	if err != nil {
 		slog.Error("Error initializing router", "error", err)

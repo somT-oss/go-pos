@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	sloggin "github.com/samber/slog-gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -30,6 +31,7 @@ func NewRouter(
 	categoryHandler CategoryHandler,
 	productHandler ProductHandler,
 	orderHandler OrderHandler,
+	metrics port.MetricsPort,
 ) (*Router, error) {
 	// Disable debug mode in production
 	if config.Env == "production" {
@@ -43,7 +45,7 @@ func NewRouter(
 	ginConfig.AllowOrigins = originsList
 
 	router := gin.New()
-	router.Use(sloggin.New(slog.Default()), gin.Recovery(), cors.New(ginConfig))
+	router.Use(sloggin.New(slog.Default()), gin.Recovery(), cors.New(ginConfig), MetricsMiddleware(metrics))
 
 	// Custom validators
 	v, ok := binding.Validator.Engine().(*validator.Validate)
@@ -60,6 +62,8 @@ func NewRouter(
 
 	// Swagger
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	router.GET("/metrics", gin.WrapH(promhttp.Handler()))
 
 	v1 := router.Group("/v1")
 	{
